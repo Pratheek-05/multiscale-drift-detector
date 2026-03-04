@@ -1,4 +1,3 @@
-import numpy as np
 
 class PageHinkley:
     def __init__(self, delta=0.005, lambda_=50, alpha=0.999):
