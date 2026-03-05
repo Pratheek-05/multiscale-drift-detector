@@ -20,13 +20,13 @@ class TestPageHinkley:
 
     def test_no_drift_on_stable_stream(self):
         """Stable constant input should not trigger drift."""
-        ph = PageHinkley(delta=0.005, threshold=50.0)
+        ph = PageHinkley(delta=0.005, lambda_=50)
         detections = sum(ph.update(0.1) for _ in range(200))
         assert detections == 0, "Should not detect drift on a stable stream"
 
     def test_detects_drift_on_step_change(self):
         """A large step change in the stream should trigger at least one detection."""
-        ph = PageHinkley(delta=0.005, threshold=10.0)
+        ph = PageHinkley(delta=0.005, lambda_=10)
         # Stable phase
         for _ in range(50):
             ph.update(0.05)
@@ -40,8 +40,8 @@ class TestPageHinkley:
         for _ in range(100):
             ph.update(0.5)
         ph.reset()
-        assert ph.n == 0
-        assert ph.sum == 0.0
+        assert ph.t == 1
+        assert ph.cumulative == 0
 
     def test_returns_bool(self):
         """update() must always return a bool."""
